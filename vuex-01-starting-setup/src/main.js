@@ -25,3 +25,4 @@ app.use(store);
 
 app.mount('#app');
 
+//.state is only used in the data store
