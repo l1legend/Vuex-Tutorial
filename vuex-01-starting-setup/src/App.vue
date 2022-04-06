@@ -14,16 +14,11 @@ export default {
     BaseContainer,
     TheCounter
   },
-  computed: {
-    counter() {
-      return this.$store.state.counter;
-    }
-  },
   methods: {
     addOne() {
       this.$store.state.counter++;
     }
-  },
+  }
 };
 </script>
 
