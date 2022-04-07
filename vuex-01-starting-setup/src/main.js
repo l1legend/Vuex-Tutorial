@@ -3,58 +3,74 @@ import { createStore } from 'vuex';
 
 import App from './App.vue';
 
+const counterModule = {
+    state() {
+        return {
+            counter: 0,
+        };
+    },
+    mutations: {
+        increment(state) {
+            state.counter = state.counter + 2;
+        },
+        increase(state, payload) {
+            state.counter = state.counter + payload.value;
+        },
+    },
+    actions: {
+        increment(context) {
+            setTimeout(function () {
+                context.commit('increment');
+            }, 2000);
+        },
+        increase(context, payload) {
+            context.commit('increase', payload);
+        },
+    },
+    getters: {
+        finalCounter(state) {
+            return state.counter * 3;
+        },
+        normalizedCounter(_, getters) {
+            const finalCounter = getters.finalCounter;
+            if (finalCounter < 0) {
+                return 0;
+            }
+            if (finalCounter > 1000) {
+                return 1000;
+            }
+            return finalCounter;
+        },
+    }
+};
+
 const store = createStore({
-  state() {
-    return {
-      counter: 0,
-      isLoggedIn: false 
-    };
-  },
-  mutations: {
-    increment(state) {
-      state.counter = state.counter + 2;
+    module: {
+        numbers: counterModule
     },
-    increase(state, payload) {
-      state.counter = state.counter + payload.value;
+    state() {
+        return {
+            isLoggedIn: false,
+        };
     },
-    setAuth(state, payload) {
-        state.isLoggedIn = payload.isAuth;
-    }
-  },
-  actions: {
-    increment(context) {
-        setTimeout(function() {
-            context.commit('increment');            
-        }, 2000);
+    mutations: {
+        setAuth(state, payload) {
+            state.isLoggedIn = payload.isAuth;
+        },
     },
-    increase(context, payload) {
-        context.commit('increase', payload);
+    actions: {
+        login(context) {
+            context.commit('setAuth', { isAuth: true });
+        },
+        logout(context) {
+            context.commit('setAuth', { isAuth: false });
+        },
     },
-    login(context) {
-        context.commit('setAuth', {isAuth: true});
+    getters: {
+        userIsAuthenticated(state) {
+            return state.isLoggedIn;
+        },
     },
-    logout(context) {
-        context.commit('setAuth', {isAuth: false});       
-    }
-  },
-  getters: {
-      finalCounter(state) {
-          return state.counter * 3;
-      },
-      normalizedCounter(_, getters) {
-        const finalCounter = getters.finalCounter;
-        if (finalCounter < 0) {
-            return 0;
-        }
-        if (finalCounter > 1000) {
-            return 1000;
-        }
-        return finalCounter;
-      },
-      userIsAuthenticated(state) {
-        return state.isLoggedIn;
-      }
-  }
 });
 
 const app = createApp(App);

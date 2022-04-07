@@ -33,7 +33,7 @@ export default {
   methods: {
     addOne() {
       // this.$store.dispatch('increase', { value: 10 });
-      this.$store.dispatch({
+      this.$store.dispatch({ //dispatch calls mutation functions
         type: 'increase',
         value: 10
       });
